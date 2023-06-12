@@ -15,14 +15,16 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Deploy in EC2
+      - name: Checkout
+        uses: actions/checkout@v2
+
       - name: Setup SSH keys
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan "${{ secrets.HOSTNAME }}" >> ~/.ssh/known_hosts
+
         env:
             PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
             HOSTNAME: ${{ secrets.HOSTNAME }}
