@@ -46,6 +46,21 @@ jobs:
             mkdir ./data
             cd ./data
             wget https://raw.githubusercontent.com/plotly/datasets/master/stockdata2.csv
+      
+      - name: install docker
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOSTNAME }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.PRIVATE_KEY }}
+          script: |
+            sudo snap refresh
+            sudo snap install docker
+            sudo service docker start
+            sudo docker info
+
+            
+
 
 
 
