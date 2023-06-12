@@ -25,14 +25,18 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan "${{ secrets.HOSTNAME }}" >> ~/.ssh/known_hosts
 
-      - name: transfer app to ec2 instance
+      - name: clone app to ec2 instance
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOSTNAME }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.PRIVATE_KEY }}
           script: |
-            wall Hello World
+            mkdir ~/amg_dash
+            git clone https://github.com/Luurit00/amg_dash.git
+
+
+
 
 
 
