@@ -96,10 +96,12 @@ jobs:
             sudo docker run -d -p 8080:5050 amg_dash:latest
       
       - name: perform a healthcheck on the runnig application
+        env:
+          HOSTNAME: ${{ secrets.HOSTNAME }}
         run: |
           END_TIME=$((SECONDS + 60))  # 1 minute from now
           while [ $SECONDS -lt $END_TIME ]; do
-            curl -s http://${{ secrets.HOSTNAME }}:8080
+            curl -s http://$"HOSTNAME":8080
             sleep 5
           done
         
