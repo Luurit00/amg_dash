@@ -23,7 +23,7 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan "${{ secrets.HOSTNAME }}" >> ~/.ssh/known_hosts
+          ssh-keyscan "${{secrets.HOSTNAME}}" >> ~/.ssh/known_hosts
 
       - name: clone app to ec2 instance
         uses: appleboy/ssh-action@master
@@ -59,6 +59,29 @@ jobs:
             sudo snap install docker
             sudo service docker start
             sudo docker info
+
+      - name: test the application
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOSTNAME }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.PRIVATE_KEY }}
+          script: |
+            cd ~/amg_dash
+            pip3 install -r requirements.txt
+            python3 -m pytest tests/test.py
+
+
+      - name: build the application with docker
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOSTNAME }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.PRIVATE_KEY }}
+          script: |
+            cd ~/amg_dash
+            docker build
+            
       
       - name: cleanup all running containers and images
         uses: appleboy/ssh-action@master
