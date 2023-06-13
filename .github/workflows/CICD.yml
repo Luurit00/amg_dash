@@ -94,11 +94,14 @@ jobs:
           key: ${{ secrets.PRIVATE_KEY }}
           script: |
             sudo docker run -d -p 8080:5050 amg_dash:latest
-            sleep 200
       
       - name: perform a healthcheck on the runnig application
         run: |
-          curl http://${{ secrets.HOSTNAME }}
+          END_TIME=$((SECONDS + 60))  # 1 minute from now
+          while [ $SECONDS -lt $END_TIME ]; do
+            curl -s http://${{ secrets.HOSTNAME }}:8080
+            sleep 5
+          done
         
 
             
