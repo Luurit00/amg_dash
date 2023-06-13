@@ -22,7 +22,7 @@ jobs:
           pip install -r requirements.txt
       - name: test the code
         run: |
-          pytest
+          python -m pytest tests/test.py 
 
   deploy:
     needs: build
