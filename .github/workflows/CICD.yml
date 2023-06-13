@@ -24,7 +24,7 @@ jobs:
       - name: test the code
         uses: VaultVulp/action-pipenv@v2.0.1
         with:
-          command: python -m pytest tests/test.py
+          command: pipenv run pytest
 
   deploy:
     needs: build
