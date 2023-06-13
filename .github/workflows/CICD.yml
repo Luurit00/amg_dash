@@ -8,9 +8,23 @@ on:
 jobs: 
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.7", "3.8", "3.9", "3.10", "3.11"]
     steps:
-      - name: Checkout Code 
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+      - name: Set up the python version ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: install requirements
+        run: |
+          pyenv install
+          pyenv shell
+      - name: test the code
+        run: |
+          pytest
+
   deploy:
     needs: build
     runs-on: ubuntu-latest
@@ -68,7 +82,8 @@ jobs:
           key: ${{ secrets.PRIVATE_KEY }}
           script: |
             cd ~/amg_dash
-            pip3 install -r requirements.txt
+            sudo pipenv install
+            sudo pipenv shell
             python3 -m pytest tests/test.py
 
 
@@ -92,13 +107,15 @@ jobs:
             sudo docker run -d -p 8080:5050 amg_dash
 
             
-      - name: cleanup all running containers and images
+      - name: cleanup all directories, running containers and images
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOSTNAME }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.PRIVATE_KEY }}
           script: |
+            cd ~
+            rm -rf ~/amg_dash
             sudo docker kill $(sudo docker ps -a -q)
             sudo docker rmi -f $(sudo docker images -a -q)
 
