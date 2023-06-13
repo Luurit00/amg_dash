@@ -18,9 +18,8 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: install requirements
-        uses: VaultVulp/action-pipenv@v2.0.1
-        with:
-          command: install -d
+        run: |
+          pip install -r requirements.txt
       - name: test the code
         run: |
           pytest
