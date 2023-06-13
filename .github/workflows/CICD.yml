@@ -22,8 +22,8 @@ jobs:
         with:
           command: install -d
       - name: test the code
-        run:
-          pipenv run pytest
+        run: |
+          pytest
 
   deploy:
     needs: build
