@@ -98,7 +98,7 @@ jobs:
       - name: perform a healthcheck on the runnig application
         env:
           HOSTNAME: ${{ secrets.HOSTNAME }}
-        scrip: |
+        script: |
           END_TIME=$((SECONDS + 60))  # 1 minute from now
           while [ $SECONDS -lt $END_TIME ]; do
             curl -s http://$HOSTNAME:8080
