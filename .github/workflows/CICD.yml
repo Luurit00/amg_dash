@@ -95,18 +95,17 @@ jobs:
           script: |
             sudo docker run -d -p 8080:5050 amg_dash:latest
       
-      - name: perform a healthcheck on the runnig application
+      - name: check the healthstatus of the application
         env:
           HOSTNAME: ${{ secrets.HOSTNAME }}
-        script: |
-          END_TIME=$((SECONDS + 60))  # 1 minute from now
-          while [ $SECONDS -lt $END_TIME ]; do
-            curl -s http://$HOSTNAME:8080
-            sleep 5
-          done
-        
-
-            
+        uses: jtalk/url-health-check-action@v3
+        with:
+          url: https://$HOSTNAME:8080
+          follow-redirect: false 
+          max-attempts: 3
+          retry-delay: 5s
+          retry-all: false 
+                
       - name: cleanup all directories, running containers and images
         uses: appleboy/ssh-action@master
         with:
