@@ -103,7 +103,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.PRIVATE_KEY }}
           script: |
-            sudo docker run -d -p 8080:5050 amg_dash
+            sudo docker run -d -p 8080:5050 amg_dash:latest
 
             
       - name: cleanup all directories, running containers and images
@@ -114,9 +114,9 @@ jobs:
           key: ${{ secrets.PRIVATE_KEY }}
           script: |
             cd ~
-            rm -rf ~/amg_dash
             sudo docker kill $(sudo docker ps -a -q)
-            sudo docker rmi -f $(sudo docker images -a -q)
+            sudo docker rmi -f amg_dash:latest
+            rm -rf ~/amg_dash
 
 
 
