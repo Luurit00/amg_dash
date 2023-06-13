@@ -80,7 +80,7 @@ jobs:
           key: ${{ secrets.PRIVATE_KEY }}
           script: |
             cd ~/amg_dash
-            docker build -t amg_dash:latest .
+            sudo docker build -t amg_dash:latest .
             
       
       - name: cleanup all running containers and images
