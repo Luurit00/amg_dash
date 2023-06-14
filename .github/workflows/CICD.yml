@@ -94,7 +94,7 @@ jobs:
           key: ${{ secrets.PRIVATE_KEY }}
           script: |
             sudo docker run -d -p 8080:5050 amg_dash:latest
-      
+
       - name: check the healthstatus of the application
         env:
           HOSTNAME: ${{ secrets.HOSTNAME }}
@@ -105,18 +105,6 @@ jobs:
           max-attempts: 3
           retry-delay: 5s
           retry-all: false 
-                
-      - name: cleanup all directories, running containers and images
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOSTNAME }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.PRIVATE_KEY }}
-          script: |
-            cd ~
-            sudo docker kill $(sudo docker ps -a -q)
-            sudo docker rmi -f amg_dash:latest
-            rm -rf ~/amg_dash
 
 
 
